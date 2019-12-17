@@ -1,20 +1,22 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
+import colors from 'vuetify/lib/util/colors'
 
-Vue.use(Vuetify);
+
+Vue.use(Vuetify)
 
 export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#ee44aa',
-        secondary: '#424242',
-        accent: '#82B1FF',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107'
-      },
-    },
-  },
-});
+        primary: colors.teal,
+        secondary: colors.purple,
+        accent: colors.pink,
+        error: colors.red,
+        info: colors.lightBlue,
+        success: colors.green,
+        warning: colors.orange
+      } as any  // Type bug of Vuetify
+    }
+  }
+})

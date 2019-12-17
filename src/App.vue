@@ -254,8 +254,7 @@ export default class App extends Vue {
 
   public async onSessionClick(target: Target) {
     if(this.$route.name != View.CONSOLES) {
-      this.doGoTo(DrawerAction.CONSOLES)
-      await this.$nextTick()
+      await this.doGoTo(DrawerAction.CONSOLES)
     }
     if(this.$vuetify.breakpoint.mdAndDown) this.drawer = false
     ;(this.view as Consoles).switchTo(target)

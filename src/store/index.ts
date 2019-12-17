@@ -9,9 +9,9 @@ export class Store {
   constructor() {
     if(Store.instance) return Store.instance
     Store.instance = this
-    this.set(SSHConsoles.name, new SSHConsoles)
-    this.set(CredentialStore.name, new CredentialStore)
-    this.set(UpstreamStore.name, new UpstreamStore)
+    this.set('SSHConsoles', new SSHConsoles)
+    this.set('CredentialStore', new CredentialStore)
+    this.set('UpstreamStore', new UpstreamStore)
   }
   public get<T extends State>(name: string): T | undefined {
     return this.states.get(name) as T

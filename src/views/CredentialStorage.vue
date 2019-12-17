@@ -83,7 +83,7 @@ export default class CredentialStorage extends Vue {
   ]
 
   private onSubmit() {
-    store.get<UpstreamStore>(UpstreamStore.name)!.set(this.url, { username: this.username, password: this.password })
+    store.get<UpstreamStore>('UpstreamStore')!.set(this.url, { username: this.username, password: this.password })
     this.url = this.username = this.password = ''
     ;(this.$refs.form as any).resetValidation()
     this.$router.replace(View.SERVER_LIST)

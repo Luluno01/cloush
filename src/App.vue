@@ -244,7 +244,7 @@ export default class App extends Vue {
   }
 
   public generateSessionItems() {
-    this.sessionItems = Array.from(store.get<SSHConsoles>(SSHConsoles.name)!.state).map(([ group, sessions ]) => {
+    this.sessionItems = Array.from(store.get<SSHConsoles>('SSHConsoles')!.state).map(([ group, sessions ]) => {
       return {
         group,
         sessions
@@ -265,14 +265,14 @@ export default class App extends Vue {
   public mounted() {
     this.drawer = (this as any /* Stupid unknown type bug */).$vuetify.breakpoint.lgAndUp
     this.generateSessionItems()
-    store.get<SSHConsoles>(SSHConsoles.name)!
+    store.get<SSHConsoles>('SSHConsoles')!
       .on('add', this._onAddSession = this.onAddSession.bind(this) as typeof App.prototype.onAddSession)
       .on('remove', this._onRemoveSession = this.onRemoveSession.bind(this) as typeof App.prototype.onRemoveSession)
     this.onRouteChange(this.$route.name as View)
   }
 
   public beforeDestroy() {
-    store.get<SSHConsoles>(SSHConsoles.name)!
+    store.get<SSHConsoles>('SSHConsoles')!
       .off('add', this._onAddSession)
       .off('remove', this._onRemoveSession)
   }

@@ -117,7 +117,7 @@ export default class Consoles extends Vue {
   }
 
   private generateSessions() {
-    this.sessions = Array.from(store.get<SSHConsoles>(SSHConsoles.name)!.state).reduce((sessions, [ , sessionsB ]) => sessions.concat(sessionsB), [] as Target[])
+    this.sessions = Array.from(store.get<SSHConsoles>('SSHConsoles')!.state).reduce((sessions, [ , sessionsB ]) => sessions.concat(sessionsB), [] as Target[])
   }
 
   public switchTo(target: Target) {
@@ -153,7 +153,7 @@ export default class Consoles extends Vue {
     }
     if(cons) {
       cons.destroy()
-      store.get<SSHConsoles>(SSHConsoles.name)!.remove(cons.target)
+      store.get<SSHConsoles>('SSHConsoles')!.remove(cons.target)
     }
     this.dialog = false
     this.focus()
@@ -165,13 +165,13 @@ export default class Consoles extends Vue {
 
   public mounted() {
     this.generateSessions()
-    store.get<SSHConsoles>(SSHConsoles.name)!
+    store.get<SSHConsoles>('SSHConsoles')!
       .on('add', this._onAddSession = this.onAddSession.bind(this) as typeof Consoles.prototype.onAddSession)
       .on('remove', this._onRemoveSession = this.onRemoveSession.bind(this) as typeof Consoles.prototype.onRemoveSession)
   }
 
   public beforeDestroy() {
-    store.get<SSHConsoles>(SSHConsoles.name)!
+    store.get<SSHConsoles>('SSHConsoles')!
       .off('add', this._onAddSession)
       .off('remove', this._onRemoveSession)
   }

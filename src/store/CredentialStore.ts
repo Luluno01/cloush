@@ -29,7 +29,7 @@ export class Credential {
     this._group = group || null
   }
   private get upstream(): Upstream {
-    return store.get<UpstreamStore>('UpstreamStore')!.state
+    return store.get('UpstreamStore').state
   }
   constructor({ id, name, uri, username, password, group }: Target & { id?: number }) {
     this.id = id || 0
@@ -76,7 +76,7 @@ export class Credential {
   }
 
   public static async create(credential: Pick<Credential, RequiredField>) {
-    const upstream = store.get<UpstreamStore>('UpstreamStore')!.state
+    const upstream = store.get('UpstreamStore').state
     return await upstream.create(credential)
   }
 }
@@ -84,7 +84,7 @@ export class Credential {
 export class CredentialStore extends EventEmitter implements State<Credential[]> {
   public readonly state: Credential[] = []
   private get upstream(): Upstream {
-    return store.get<UpstreamStore>('UpstreamStore')!.state
+    return store.get('UpstreamStore').state
   }
   public async loadCredentials() {
     const { upstream } = this

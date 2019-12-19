@@ -10,7 +10,8 @@ export enum View {
   ADD_SERVER = 'add-server',
   SERVER_LIST = 'server-list',
   CONSOLES = 'consoles',
-  SETTINGS = 'settings'
+  SETTINGS = 'settings',
+  ABOUT = 'about'
 }
 
 Vue.use(VueRouter)
@@ -33,12 +34,12 @@ const routes = [
     component: ServerList
   },
   {
-    path: '/about',
-    name: 'about',
+    path: '/' + View.ABOUT,
+    name: View.ABOUT,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
   },
   {
     path: '/' + View.SETTINGS,

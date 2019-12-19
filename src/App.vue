@@ -7,8 +7,8 @@
       app
     >
       <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/64.jpg"></v-img>
+        <v-list-item-avatar tile size="32">
+          <v-img :src="require('@/assets/logo.svg')"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title>Cloush</v-list-item-title>
@@ -175,6 +175,12 @@ export default class App extends Vue {
       icon: 'mdi-settings',
       title: 'Settings',
       action: DrawerAction.SETTINGS,
+      onClick: this.goTo
+    },
+    {
+      icon: 'mdi-help-circle',
+      title: 'About',
+      action: DrawerAction.ABOUT,
       onClick: this.goTo
     }
   ]

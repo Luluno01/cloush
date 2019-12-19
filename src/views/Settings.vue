@@ -35,7 +35,7 @@ import store from '@/store'
 export default class Settings extends Vue {
   public settingsGroup = [
     {
-      name: 'General',
+      name: 'Terminal',
       settings: [
         {
           type: 'boolean',

@@ -27,6 +27,17 @@ Okay, let's use a graph to explain the whole thing:
 
 <img src="./public/cloush-visio.png" style="max-width: 100%;"/>
 
+## Screenshots
+
+<img src="./public/screenshots/about.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/credential-storage.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/server-list-add-server.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/server-list-save-server.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/add-server.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/consoles-0.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/consoles-1.png" style="max-width: 100%;"/>
+<img src="./public/screenshots/mobile-view.png" style="max-width: 100%;"/>
+
 ## Project setup
 
 ```bash

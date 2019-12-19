@@ -50,8 +50,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import SshConsole from '@/components/SSHConsole.vue'
 import io from 'socket.io-client'
 import store from '@/store'
-import { SSHConsoleTarget } from '@/components/SSHConsole'
-import SSHConsoles, { Target } from '@/store/SSHConsoles'
+import { Target } from '@/store/SSHConsoles'
 import sleep from 'unlib.js/build/Time/sleep'
 
 
@@ -101,7 +100,7 @@ export default class Consoles extends Vue {
   private _onAddSession!: (target: Target) => void
   private async onAddSession(target: Target) {
     this.generateSessions()
-    this.tabIndexVal = this.sessions.indexOf(target)
+    this.tabIndex = this.sessions.indexOf(target)
     await this.$nextTick()
     this.focus()
   }
@@ -117,7 +116,7 @@ export default class Consoles extends Vue {
   }
 
   private generateSessions() {
-    this.sessions = Array.from(store.get<SSHConsoles>('SSHConsoles')!.state).reduce((sessions, [ , sessionsB ]) => sessions.concat(sessionsB), [] as Target[])
+    this.sessions = Array.from(store.get('SSHConsoles').state).reduce((sessions, [ , sessionsB ]) => sessions.concat(sessionsB), [] as Target[])
   }
 
   public switchTo(target: Target) {
@@ -153,7 +152,7 @@ export default class Consoles extends Vue {
     }
     if(cons) {
       cons.destroy()
-      store.get<SSHConsoles>('SSHConsoles')!.remove(cons.target)
+      store.get('SSHConsoles').remove(cons.target)
     }
     this.dialog = false
     this.focus()
@@ -165,13 +164,13 @@ export default class Consoles extends Vue {
 
   public mounted() {
     this.generateSessions()
-    store.get<SSHConsoles>('SSHConsoles')!
+    store.get('SSHConsoles')
       .on('add', this._onAddSession = this.onAddSession.bind(this) as typeof Consoles.prototype.onAddSession)
       .on('remove', this._onRemoveSession = this.onRemoveSession.bind(this) as typeof Consoles.prototype.onRemoveSession)
   }
 
   public beforeDestroy() {
-    store.get<SSHConsoles>('SSHConsoles')!
+    store.get('SSHConsoles')
       .off('add', this._onAddSession)
       .off('remove', this._onRemoveSession)
   }

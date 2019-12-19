@@ -9,7 +9,8 @@ export enum View {
   CREDENTIAL_STORAGE = 'credential-storage',
   ADD_SERVER = 'add-server',
   SERVER_LIST = 'server-list',
-  CONSOLES = 'consoles'
+  CONSOLES = 'consoles',
+  SETTINGS = 'settings'
 }
 
 Vue.use(VueRouter)
@@ -38,6 +39,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/' + View.SETTINGS,
+    name: View.SETTINGS,
+    component: () => import('@/views/Settings.vue')
   }
 ]
 

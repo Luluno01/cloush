@@ -103,12 +103,11 @@
 <script lang="ts">
 // @ is an alias to /src
 import { Component, Vue } from 'vue-property-decorator'
-import { SSHConsoleTarget } from '@/components/SSHConsole'
 import EditServer from '@/components/EditServer.vue'
 import store from '@/store'
-import { CredentialStore, Credential } from '@/store/CredentialStore'
+import { Credential } from '@/store/CredentialStore'
 import { View } from '@/router'
-import SSHConsoles, { Target } from '@/store/SSHConsoles'
+import { Target } from '@/store/SSHConsoles'
 import sleep from 'unlib.js/build/Time/sleep'
 import CredentialStorage from './CredentialStorage.vue'
 
@@ -138,7 +137,7 @@ export default class ServerList extends Vue {
   }
   protected async onServerClick(target: Credential) {
     await this.$router.replace(View.CONSOLES)
-    store.get<SSHConsoles>('SSHConsoles')!.add(target.toJSON(true))
+    store.get('SSHConsoles').add(target.toJSON(true))
   }
 
   protected _onLoadCredentials!: (credentials: Credential[]) => void
@@ -178,13 +177,13 @@ export default class ServerList extends Vue {
       credentials.splice(credentials.indexOf(credential), 1)
     } else {
       // Reset
-      this.onLoadCredentials(store.get<CredentialStore>('CredentialStore')!.state)
+      this.onLoadCredentials(store.get('CredentialStore').state)
     }
   }
 
   public async mounted() {
     try {
-      await store.get<CredentialStore>('CredentialStore')!
+      await store.get('CredentialStore')
         .on('load-credentials', this._onLoadCredentials = this.onLoadCredentials.bind(this) as typeof ServerList.prototype.onLoadCredentials)
         .on('add', this._onAddCredential = this.onAddCredential.bind(this) as typeof ServerList.prototype.onAddCredential)
         .on('remove', this._onRemoveCredential = this.onRemoveCredential.bind(this) as typeof ServerList.prototype.onRemoveCredential)
@@ -209,7 +208,7 @@ export default class ServerList extends Vue {
 
   public async onRefreshClick() {
     try {
-      store.get<CredentialStore>('CredentialStore')!.loadCredentials()
+      store.get('CredentialStore').loadCredentials()
       this.snackbarText = 'Server list refreshed'
     } catch(err) {
       console.error('Refresh failed', err)
@@ -233,7 +232,7 @@ export default class ServerList extends Vue {
     try {
       const { deletingServer } = this
       await deletingServer!.destroy()
-      store.get<CredentialStore>('CredentialStore')!.remove(deletingServer!)
+      store.get('CredentialStore')!.remove(deletingServer!)
       this.snackbarText = 'Server deleted'
     } catch(err) {
       this.snackbarText = 'Failed to delete server :('
@@ -282,7 +281,7 @@ export default class ServerList extends Vue {
         if(typeof id == 'number') {
           editingServer!.id = id
           const credential = new Credential(editingServer!)
-          store.get<CredentialStore>('CredentialStore')!.add(credential)
+          store.get('CredentialStore')!.add(credential)
         } else {
           await sleep(1000)
           this.onRefreshClick()

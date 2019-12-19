@@ -122,7 +122,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { View } from '@/router'
 import store from './store'
-import SSHConsoles, { Target } from './store/SSHConsoles'
+import { Target } from './store/SSHConsoles'
 import Consoles from './views/Consoles.vue'
 import ServerList from './views/ServerList.vue'
 
@@ -170,6 +170,12 @@ export default class App extends Vue {
       title: 'Consoles',
       action: DrawerAction.CONSOLES,
       onClick: this.goTo
+    },
+    {
+      icon: 'mdi-settings',
+      title: 'Settings',
+      action: DrawerAction.SETTINGS,
+      onClick: this.goTo
     }
   ]
   public currentActionIndex = 0
@@ -188,10 +194,6 @@ export default class App extends Vue {
     }
   }
 
-  public get view() {
-    return this.$refs.view
-  }
-
   public currentTitle = 'Cloush'
 
   @Watch('$route.name')
@@ -199,7 +201,7 @@ export default class App extends Vue {
     this.currentAction = newRouteName
     if(newRouteName == View.CONSOLES) {
       await this.$nextTick()
-      const consoles = this.view as Consoles
+      const consoles = this.$refs.view as Consoles
       if(consoles instanceof Consoles && consoles.currentSessionName) {
         this.currentTitle = consoles.currentSessionName
       }
@@ -244,7 +246,7 @@ export default class App extends Vue {
   }
 
   public generateSessionItems() {
-    this.sessionItems = Array.from(store.get<SSHConsoles>('SSHConsoles')!.state).map(([ group, sessions ]) => {
+    this.sessionItems = Array.from(store.get('SSHConsoles')!.state).map(([ group, sessions ]) => {
       return {
         group,
         sessions
@@ -257,21 +259,21 @@ export default class App extends Vue {
       await this.doGoTo(DrawerAction.CONSOLES)
     }
     if(this.$vuetify.breakpoint.mdAndDown) this.drawer = false
-    ;(this.view as Consoles).switchTo(target)
-    this.currentTitle = (this.view as Consoles).currentSessionName!
+    ;(this.$refs.view as Consoles).switchTo(target)
+    this.currentTitle = (this.$refs.view as Consoles).currentSessionName!
   }
 
   public mounted() {
     this.drawer = (this as any /* Stupid unknown type bug */).$vuetify.breakpoint.lgAndUp
     this.generateSessionItems()
-    store.get<SSHConsoles>('SSHConsoles')!
+    store.get('SSHConsoles')!
       .on('add', this._onAddSession = this.onAddSession.bind(this) as typeof App.prototype.onAddSession)
       .on('remove', this._onRemoveSession = this.onRemoveSession.bind(this) as typeof App.prototype.onRemoveSession)
     this.onRouteChange(this.$route.name as View)
   }
 
   public beforeDestroy() {
-    store.get<SSHConsoles>('SSHConsoles')!
+    store.get('SSHConsoles')!
       .off('add', this._onAddSession)
       .off('remove', this._onRemoveSession)
   }
@@ -285,17 +287,17 @@ export default class App extends Vue {
   }
 
   protected onToggleDeleteClick() {
-    const { view } = this
+    const { $refs: { view } } = this
     if(view instanceof ServerList) view.onToggleClick()
   }
 
   protected onRefreshServerListClick() {
-    const { view } = this
+    const { $refs: { view } } = this
     if(view instanceof ServerList) view.onRefreshClick()
   }
 
   protected onCloseConsoleClick() {
-    const { view } = this
+    const { $refs: { view } } = this
     if(view instanceof Consoles) {
       view.onCloseClick()
     }

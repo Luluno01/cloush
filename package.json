@@ -19,7 +19,8 @@
     "xterm": "^4.3.0",
     "xterm-addon-fit": "^0.3.0",
     "xterm-addon-search": "^0.4.0",
-    "xterm-addon-web-links": "^0.2.1"
+    "xterm-addon-web-links": "^0.2.1",
+    "xterm-addon-webgl": "^0.4.1"
   },
   "devDependencies": {
     "@types/socket.io-client": "^1.4.32",

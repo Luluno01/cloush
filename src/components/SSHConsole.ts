@@ -2,8 +2,10 @@ import { SocketHandler, On } from '@/helpers/SocketHandler'
 import { Terminal, IDisposable } from 'xterm'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { FitAddon } from 'xterm-addon-fit'
+import { WebglAddon } from 'xterm-addon-webgl'
 import { Credential } from '@/store/CredentialStore'
 import { EventEmitter } from 'events'
+import store from '@/store'
 
 
 export enum ForegroundColor {
@@ -52,6 +54,7 @@ export class SSHConsole extends SocketHandler {
     const fitAddon = this.fitAddon = new FitAddon
     term.loadAddon(fitAddon)
     fitAddon.fit()
+    if(store.get('ConfigStore').get('useWebGL')) term.loadAddon(new WebglAddon(true))
     this.disposables.push(term.onResize(newSize => this.socket.emit('resize', newSize)))
     this.disposables.push(term.onData(data => this.socket.send(data)))
   }

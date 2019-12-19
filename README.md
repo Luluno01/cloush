@@ -2,6 +2,10 @@
 
 <img width="256" height="256" src="./public/cloush.svg"/>
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7af9be29-b710-470f-9310-35f256134ed2/deploy-status)](https://app.netlify.com/sites/cloush/deploys)
+
+Live site [cloush.netlify.com](https://cloush.netlify.com)
+
 Cloush is basically a cross-platform SSH client on the cloud (or maybe not?) with distributed credential storage (see below for more details).
 
 ~~This project is meant to meet my own needs, other than those of anyone else.~~ I hope someone would like these projects, that is why I made them open-sourced. Pull/Feature requests are very much welcomed. However, implementation of new features is subject to my private schedule.

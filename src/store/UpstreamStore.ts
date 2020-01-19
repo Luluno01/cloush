@@ -33,16 +33,26 @@ export class Upstream {
     if(init) {
       if(init.headers) {
         (init.headers as any).Authorization = authHeader
+        ;(init.headers as any)['sec-fetch-mode'] = 'cors'
+        ;(init.headers as any)['sec-fetch-site'] = 'cross-site'
       } else {
         init.headers = {
-          Authorization: authHeader
+          Authorization: authHeader,
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'cross-site'
         }
       }
+      init.referrerPolicy = init.referrerPolicy || 'no-referrer-when-downgrade'
+      init.mode = init.mode || 'cors'
     } else {
       init = {
         headers: {
-          Authorization: authHeader
-        }
+          Authorization: authHeader,
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'cross-site'
+        },
+        referrerPolicy: 'no-referrer-when-downgrade',
+        mode: 'cors'
       }
     }
     return await fetchJSON<T>(url, init)

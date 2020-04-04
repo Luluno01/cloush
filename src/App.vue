@@ -172,7 +172,7 @@ export default class App extends Vue {
       onClick: this.goTo
     },
     {
-      icon: 'mdi-settings',
+      icon: 'mdi-cog',
       title: 'Settings',
       action: DrawerAction.SETTINGS,
       onClick: this.goTo

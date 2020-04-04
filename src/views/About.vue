@@ -63,7 +63,7 @@ export default class About extends Vue {
       link: 'https://blog.untitled.vip/'
     },
     {
-      icon: 'mdi-github-circle',
+      icon: 'mdi-github',
       title: 'Github repository',
       subtitle: 'https://github.com/Luluno01/cloush',
       link: 'https://github.com/Luluno01/cloush'

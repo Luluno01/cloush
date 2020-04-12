@@ -50,8 +50,11 @@ export class SocketHandler {
     this.handlers.forEach(([ event, handler ]) => socket.off(event, handler))
   }
   public destroy() {
-    this.socket.disconnect()
-    this.detach()
+    try {
+      this.socket.disconnect()
+    } finally {
+      this.detach()
+    }
   }
 }
 

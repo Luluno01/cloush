@@ -96,6 +96,13 @@
       <v-btn
         icon
         v-if="$route.name == 'consoles'"
+        @click.stop="onToggleKeyboardClick"
+      >
+        <v-icon>mdi-keyboard</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        v-if="$route.name == 'consoles'"
         @click.stop="onCloseConsoleClick"
       >
         <v-icon>mdi-close</v-icon>
@@ -300,6 +307,13 @@ export default class App extends Vue {
   protected onRefreshServerListClick() {
     const { $refs: { view } } = this
     if(view instanceof ServerList) view.onRefreshClick()
+  }
+
+  protected onToggleKeyboardClick() {
+    const { $refs: { view } } = this
+    if (view instanceof Consoles) {
+      view.onToggleKeyboardClick()
+    }
   }
 
   protected onCloseConsoleClick() {

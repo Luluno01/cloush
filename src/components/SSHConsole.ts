@@ -53,7 +53,11 @@ export class SSHConsole extends SocketHandler {
     term.loadAddon(new WebLinksAddon)
     const fitAddon = this.fitAddon = new FitAddon
     term.loadAddon(fitAddon)
-    fitAddon.fit()
+    try {
+      fitAddon.fit()
+    } catch(err) {
+      console.error('Unable to fit terminal', err)
+    }
     if(store.get('ConfigStore').get('useWebGL')) term.loadAddon(new WebglAddon(true))
     this.disposables.push(term.onResize(newSize => this.socket.emit('resize', newSize)))
     this.disposables.push(term.onData(data => this.socket.send(data)))

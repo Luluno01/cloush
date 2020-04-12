@@ -37,20 +37,36 @@ const defaultTheme: ITheme = {
 
 @Component
 export default class SSHConsole extends Vue {
-  protected console!: SSHCons
-  protected terminal!: Terminal
+  public console!: SSHCons
+  public terminal!: Terminal
   protected resizeTimeout: ReturnType<typeof setTimeout> | null = null
   @Prop()
   public target!: Target
   public get eventEmitter() {
     return this.console && this.console.eventEmitter
   }
-  public mounted() {
+  @Prop({
+    default: undefined
+  })
+  protected keyHandler?: (event: KeyboardEvent) => boolean
+  @Prop({
+    default: undefined
+  })
+  protected beforeInput?: (event: InputEvent) => void
+
+  public async mounted() {
     const term = this.terminal = new Terminal()
     this.setTheme(defaultTheme)
     term.open(this.$refs['terminal'] as HTMLDivElement)
+    if (this.keyHandler) term.attachCustomKeyEventHandler(this.keyHandler)
     const cons = this.console = new SSHCons(term)
     cons.connectSSH(this.target)
+    await this.$nextTick()
+    const { beforeInput } = this
+    const textarea = term.element?.querySelector('textarea')
+    if (beforeInput && textarea) {
+      textarea.addEventListener('beforeinput' as any, this.beforeInput as any)
+    }
   }
 
   public onResize() {

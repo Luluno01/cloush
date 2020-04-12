@@ -1,6 +1,6 @@
 {
   "name": "cloush",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -16,11 +16,11 @@
     "vue-property-decorator": "^8.4.1",
     "vue-router": "^3.1.6",
     "vuetify": "^2.2.21",
-    "xterm": "^4.3.0",
+    "xterm": "^4.5.0",
     "xterm-addon-fit": "^0.3.0",
-    "xterm-addon-search": "^0.4.0",
-    "xterm-addon-web-links": "^0.2.1",
-    "xterm-addon-webgl": "^0.4.1"
+    "xterm-addon-search": "^0.6.0",
+    "xterm-addon-web-links": "^0.3.0",
+    "xterm-addon-webgl": "^0.6.0"
   },
   "devDependencies": {
     "@types/socket.io-client": "^1.4.32",

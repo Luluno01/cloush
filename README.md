@@ -19,6 +19,8 @@ Note that this is only a client, you need to install [WebSSHD](https://github.co
 * Trustable credential storage: you run the credential storage server on your own, all credentials are in your own hand
 * Ass-kicking user interface: of course it is, because I made it
 
+*Start from v0.2.0, the client (this repository) will not support SimpleAuth, instead, SaltyAuth (see [server code](https://github.com/Luluno01/web-sshd/blob/master/src/authenticators/SaltyAuth.ts#L77)) is used.*
+
 ## How It Works?
 
 The idea is quite simple. First, I implementation a SSHD-like server that serves pseudoterminal processes via WebSocket using [node-pty](https://github.com/microsoft/node-pty) and [Socket.IO](https://socket.io/). Second, in order to manage credentials, a credential storage server is necessary (nothing special here). Finally, a client (it is a heavy work, really) that retrieves credentials from the credential storage and connect to target server running [WebSSHD](https://github.com/Luluno01/web-sshd) thereafter.

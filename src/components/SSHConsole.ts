@@ -6,6 +6,7 @@ import { WebglAddon } from 'xterm-addon-webgl'
 import { Credential } from '@/store/CredentialStore'
 import { EventEmitter } from 'events'
 import store from '@/store'
+import sha512 from '@/helpers/sha512'
 
 
 export enum ForegroundColor {
@@ -73,8 +74,21 @@ export class SSHConsole extends SocketHandler {
   public onConnect() {
     this.eventEmitter.emit('connect')
     this.term.writeln(`${ForegroundColor.CYAN}Connected, authenticating${OtherColor.RESET}`)
-    const { username, password } = this.auth
-    this.socket.emit('auth', { username, password })
+    const { username } = this.auth
+    this.socket.emit('username', username)
+  }
+
+  @On()
+  public salts(salts: string[]) {
+    if (!(salts instanceof Array) || !salts[0] || !salts[1] ) {
+      this.eventEmitter.emit('failed')
+      this.term.writeln(`${ForegroundColor.RED}Unknown response from server${OtherColor.RESET}`)
+      this.socket.emit('disconnect')
+      this.destroy()
+    }
+    const { password } = this.auth
+    const [ staticSalt, dynamicSalt ] = salts
+    this.socket.emit('password', sha512(dynamicSalt + sha512(staticSalt + password)))
   }
 
   @On()
@@ -88,7 +102,7 @@ export class SSHConsole extends SocketHandler {
   @On('username-or-password-incorrect')
   public authFailed() {
     this.eventEmitter.emit('username-or-password-incorrect')
-    this.term.writeln(`${ForegroundColor.RED}User name or password incorrect${OtherColor.RESET}`)
+    this.term.writeln(`${ForegroundColor.RED}Username or password incorrect${OtherColor.RESET}`)
   }
 
   @On()

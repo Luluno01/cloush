@@ -131,8 +131,13 @@ export class SSHConsole extends SocketHandler {
 
   public fit() {
     this.fitAddon.fit()
-    const { term: { rows, cols } } = this
-    this.socket.emit('resize', { cols, rows })
+    const { term: { rows, cols, element } } = this
+    this.socket.emit('resize', element ? {
+      cols,
+      rows,
+      height: element.clientHeight,
+      width: element.clientWidth
+    } : { cols, rows })
   }
 
   public refresh() {

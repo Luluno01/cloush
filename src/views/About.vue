@@ -109,6 +109,12 @@ export default class About extends Vue {
     },
     {
       icon: 'mdi-package-variant-closed',
+      title: 'ssh2',
+      subtitle: '"SSH2 client and server modules written in pure JavaScript for node.js."',
+      link: 'https://github.com/mscdex/ssh2'
+    },
+    {
+      icon: 'mdi-package-variant-closed',
       title: 'Unlib.js',
       subtitle: 'Untitled\'s personal JavaScript library',
       link: 'https://github.com/Luluno01/unlib.js'

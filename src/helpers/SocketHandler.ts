@@ -48,6 +48,7 @@ export class SocketHandler {
   private detach() {
     const { socket } = this
     this.handlers.forEach(([ event, handler ]) => socket.off(event, handler))
+    this.handlers = []
   }
   public destroy() {
     try {

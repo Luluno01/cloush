@@ -60,7 +60,7 @@ export class SSHConsole extends SocketHandler {
       console.error('Unable to fit terminal', err)
     }
     if(store.get('ConfigStore').get('useWebGL')) term.loadAddon(new WebglAddon(true))
-    this.disposables.push(term.onResize(newSize => this.socket.emit('resize', newSize)))
+    // this.disposables.push(term.onResize(newSize => this.socket.emit('resize', newSize)))
     this.disposables.push(term.onData(data => this.socket.send(data)))
   }
 
@@ -99,10 +99,24 @@ export class SSHConsole extends SocketHandler {
     this.fit()
   }
 
+  @On('remote-ready')
+  public remoteReady() {
+    this.eventEmitter.emit('remote-ready')
+    this.term.writeln(`${ForegroundColor.GREEN}Remote logged in${OtherColor.RESET}\n\n`)
+    this.socket.once('message', () => this.term.clear())
+    this.fit()
+  }
+
   @On('username-or-password-incorrect')
   public authFailed() {
     this.eventEmitter.emit('username-or-password-incorrect')
     this.term.writeln(`${ForegroundColor.RED}Username or password incorrect${OtherColor.RESET}`)
+  }
+
+  @On()
+  public failed(msg?: string) {
+    this.eventEmitter.emit('failed', msg)
+    this.term.writeln(`${ForegroundColor.RED}${msg || 'Remote failure'}${OtherColor.RESET}`)
   }
 
   @On()
@@ -119,8 +133,26 @@ export class SSHConsole extends SocketHandler {
   }
 
   @On()
+  public exit(exitCode: number, signal?: number) {
+    this.eventEmitter.emit('exit')
+    this.term.writeln(`\r\n\n${ForegroundColor.YELLOW}Exit code: ${exitCode}${typeof signal == 'number' ? `, signal: ${signal}` : ''}${OtherColor.RESET}`)
+    this.destroy()
+  }
+
+  @On('remote-exit')
+  public remoteExit(exitCode: number, signalName: string | null, didCoreDump: boolean | null, description: string | null) {
+    this.eventEmitter.emit('remote-exit')
+    this.term.write(`\r\n\n${ForegroundColor.YELLOW}Exit code: ${exitCode}`)
+    if (signalName) this.term.write(`\r\nSignal: ${signalName}`)
+    if (typeof didCoreDump == 'boolean') this.term.write(`\r\nDid core dump: ${didCoreDump}`)
+    if (description) this.term.write(`\r\nDescription: ${description}`)
+    this.term.writeln(OtherColor.RESET)
+    this.destroy()
+  }
+
+  @On()
   public message(data: string) {
-    this.term.write(data)
+    if (data) this.term.write(data)
   }
 
   @On()
@@ -131,13 +163,24 @@ export class SSHConsole extends SocketHandler {
 
   public fit() {
     this.fitAddon.fit()
-    const { term: { rows, cols, element } } = this
-    this.socket.emit('resize', element ? {
-      cols,
-      rows,
-      height: element.clientHeight,
-      width: element.clientWidth
-    } : { cols, rows })
+    this.emitResize()
+  }
+
+  protected $resizeTimer?: ReturnType<typeof setTimeout>
+  protected emitResize() {
+    if (this.$resizeTimer) {
+      clearTimeout(this.$resizeTimer)
+    }
+    this.$resizeTimer = setTimeout(() => {
+      this.$resizeTimer = undefined
+      const { term: { rows, cols, element } } = this
+      if (element) this.socket.emit('resize', {
+        cols,
+        rows,
+        height: element.clientHeight,
+        width: element.clientWidth
+      })
+    }, 500)
   }
 
   public refresh() {
@@ -152,6 +195,7 @@ export class SSHConsole extends SocketHandler {
     super.destroy()
     this.eventEmitter.emit('destroy')
     this.disposables.forEach(disposable => disposable.dispose())
+    this.disposables = []
   }
 }
 

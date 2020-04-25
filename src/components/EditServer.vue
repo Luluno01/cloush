@@ -10,7 +10,7 @@
         <v-btn dark text @click="onSave" :disabled="!valid">Save</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-form v-if="server" v-model="valid">
+    <v-form v-if="server" v-model="valid" ref="form">
       <v-container>
         <v-row>
           <v-col
@@ -129,5 +129,9 @@ export default class EditServer extends Vue {
   ]
 
   private showPassword = false
+
+  public resetValidation() {
+    (this.$refs.form as any).resetValidation()
+  }
 }
 </script>

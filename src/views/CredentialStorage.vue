@@ -5,7 +5,7 @@
         <v-row>
           <v-col
             cols="12"
-            md="4"
+            md="6"
             sm="12"
           >
             <v-text-field
@@ -16,7 +16,7 @@
             ></v-text-field>
           </v-col>
 
-          <v-col
+          <!-- <v-col
             cols="12"
             md="4"
             sm="12"
@@ -27,11 +27,11 @@
               label="User name"
               required
             ></v-text-field>
-          </v-col>
+          </v-col> -->
 
           <v-col
             cols="12"
-            md="4"
+            md="6"
             sm="12"
           >
             <v-text-field
@@ -65,26 +65,26 @@ Component.registerHooks([
 @Component
 export default class CredentialStorage extends Vue {
   private url = ''
-  private username = ''
+  // private username = ''
   private password = ''
 
   public mounted() {
-    this.url = this.username = this.password = ''
+    this.url = /* this.username = */ this.password = ''
   }
 
   private urlRules = [
     (v: string) => !!v.trim() || 'URL is required'
   ]
-  private usernameRules = [
-    (v: string) => !!v.trim() || 'User name is required'
-  ]
+  // private usernameRules = [
+  //   (v: string) => !!v.trim() || 'User name is required'
+  // ]
   private passwordRules = [
     (v: string) => !!v.trim() || 'Password is required'
   ]
 
   private onSubmit() {
-    store.get('UpstreamStore').set(this.url, { username: this.username, password: this.password })
-    this.url = this.username = this.password = ''
+    store.get('UpstreamStore').set(this.url, { /* username: this.username, */ password: this.password })
+    this.url = /* this.username = */ this.password = ''
     ;(this.$refs.form as any).resetValidation()
     this.$router.replace(View.SERVER_LIST)
   }

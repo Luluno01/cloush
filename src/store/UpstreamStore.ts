@@ -12,8 +12,8 @@ export type RequiredField = 'name' | 'uri' | 'username' | 'password' | 'group'
  */
 export class Upstream {
   public base: string
-  public auth: { username: string, password: string }
-  constructor(base: string, auth: { username: string, password: string }) {
+  public auth: { /* username: string, */ password: string }
+  constructor(base: string, auth: { /* username: string, */ password: string }) {
     if(base.endsWith('/')) base = base.substr(0, base.length - 1)
     this.base = base
     this.auth = auth
@@ -28,16 +28,16 @@ export class Upstream {
   }
 
   protected async fetchJSON<T>(url: string, init?: RequestInit) {
-    const { auth: { username, password } } = this
-    const authHeader = `Basic ${btoa(`${username}:${password}`)}`
+    const { auth: { password } } = this
+    const pwd = btoa(password)
     if(init) {
       if(init.headers) {
-        (init.headers as any).Authorization = authHeader
+        (init.headers as any)['X-KEY'] = pwd
         ;(init.headers as any)['sec-fetch-mode'] = 'cors'
         ;(init.headers as any)['sec-fetch-site'] = 'cross-site'
       } else {
         init.headers = {
-          Authorization: authHeader,
+          'X-KEY': pwd,
           'sec-fetch-mode': 'cors',
           'sec-fetch-site': 'cross-site'
         }
@@ -47,7 +47,7 @@ export class Upstream {
     } else {
       init = {
         headers: {
-          Authorization: authHeader,
+          'X-KEY': pwd,
           'sec-fetch-mode': 'cors',
           'sec-fetch-site': 'cross-site'
         },
@@ -102,7 +102,7 @@ export class LocalUpstream extends Upstream {
   private id = 1
   private records: Map<number, Target & { id: number }> = new Map
   constructor() {
-    super('webssh://local/credentials', { username: '', password: '' })
+    super('webssh://local/credentials', { /* username: '', */ password: '' })
   }
 
   public async save(credential: Credential) {
@@ -155,7 +155,7 @@ export class LocalUpstream extends Upstream {
 export class UpstreamStore extends EventEmitter implements State<Upstream> {
   public readonly state: Upstream = new LocalUpstream
 
-  public set(baseURL: string, auth: { username: string, password: string }) {
+  public set(baseURL: string, auth: { /* username: string, */ password: string }) {
     Object.defineProperty(this, 'state', {
       writable: false,
       enumerable: true,

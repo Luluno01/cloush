@@ -1,5 +1,8 @@
 <template>
   <v-container class="server-list fill-view px-0" fluid>
+    <v-alert class="mx-2 mb-0" type="info" v-if="usingLocalUpstream">
+      You are using temporary local credential storage
+    </v-alert>
     <v-list dense style="margin-bottom: calc(16px + 56px);">
       <v-subheader>Server List</v-subheader>
       <v-list-group
@@ -110,6 +113,7 @@ import { View } from '@/router'
 import { Target } from '@/store/SSHConsoles'
 import sleep from 'unlib.js/build/Time/sleep'
 import CredentialStorage from './CredentialStorage.vue'
+import { LocalUpstream } from '../store/UpstreamStore'
 
 
 Component.registerHooks([
@@ -122,6 +126,7 @@ Component.registerHooks([
   }
 })
 export default class ServerList extends Vue {
+  private usingLocalUpstream = false
   public deleteMode = false
   public groups: { group: string | null, credentials: Credential[] }[] = []
   private editingServer?: Credential | (Target & { id?: number })
@@ -182,12 +187,13 @@ export default class ServerList extends Vue {
   }
 
   public async mounted() {
+    this.usingLocalUpstream = store.get('UpstreamStore').state instanceof LocalUpstream
     try {
-      await store.get('CredentialStore')
+      await (store.get('CredentialStore')
         .on('load-credentials', this._onLoadCredentials = this.onLoadCredentials.bind(this) as typeof ServerList.prototype.onLoadCredentials)
         .on('add', this._onAddCredential = this.onAddCredential.bind(this) as typeof ServerList.prototype.onAddCredential)
         .on('remove', this._onRemoveCredential = this.onRemoveCredential.bind(this) as typeof ServerList.prototype.onRemoveCredential)
-        .loadCredentials()
+        .loadCredentials())
       this.snackbarText = 'Credentials loaded'
     } catch(err) {
       console.error('Failed to load credentials', err)
@@ -207,8 +213,9 @@ export default class ServerList extends Vue {
   }
 
   public async onRefreshClick() {
+    this.usingLocalUpstream = store.get('UpstreamStore').state instanceof LocalUpstream
     try {
-      store.get('CredentialStore').loadCredentials()
+      await store.get('CredentialStore').loadCredentials()
       this.snackbarText = 'Server list refreshed'
     } catch(err) {
       console.error('Refresh failed', err)
@@ -300,6 +307,8 @@ export default class ServerList extends Vue {
     this.editingServer = this.newEditedServer()
     this.editedServer = this.newEditedServer()
     this.editServerDialog = true
+    await this.$nextTick()
+    ;(this.$refs.editServer as any).resetValidation()
   }
 }
 </script>

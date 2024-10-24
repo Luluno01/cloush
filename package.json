@@ -12,7 +12,7 @@
     "jssha": "^3.1.0",
     "socket.io-client": "^2.3.0",
     "unlib.js": "git+https://github.com/Luluno01/unlib.js.git",
-    "vue": "^2.6.11",
+    "vue": "^3.0.0",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.1.6",

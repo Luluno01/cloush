@@ -114,7 +114,7 @@ export default class Consoles extends Vue {
     return this.sessions.length ? this.sessions[this.tabIndexVal].name : undefined
   }
 
-  private _onAddSession!: (target: Target) => void
+  private _onAddSession!: (target: Target) => Promise<void>
   private async onAddSession(target: Target) {
     this.generateSessions()
     this.tabIndex = this.sessions.indexOf(target)
@@ -123,7 +123,7 @@ export default class Consoles extends Vue {
     this.focus()
   }
 
-  private _onRemoveSession!: (target: Target, index: number) => void
+  private _onRemoveSession!: (target: Target, index: number) => Promise<void>
   private async onRemoveSession(target: Target, index: number) {
     const { sessions, tabIndexVal } = this
     if(target == sessions[tabIndexVal]) {

@@ -144,7 +144,7 @@ interface DrawerItem {
   icon: string
   title: string
   action?: DrawerAction
-  onClick: (action: DrawerAction) => void
+  onClick: (action: DrawerAction) => void | Promise<void>
 }
 
 @Component
@@ -271,8 +271,10 @@ export default class App extends Vue {
     if(this.$route.name != View.CONSOLES) {
       await this.doGoTo(DrawerAction.CONSOLES)
     }
-    if(this.$vuetify.breakpoint.mdAndDown) this.drawer = false
-    ;(this.$refs.view as Consoles).switchTo(target)
+    if(this.$vuetify.breakpoint.mdAndDown) {
+      this.drawer = false
+    }
+    (this.$refs.view as Consoles).switchTo(target)
     this.currentTitle = (this.$refs.view as Consoles).currentSessionName!
   }
 
